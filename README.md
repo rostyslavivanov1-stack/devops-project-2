@@ -119,11 +119,11 @@ minikube tunnel
 ### 2. Вебінтерфейси у браузері
 Після запуску тунелю сервіси доступні за адресами:
 * **Через єдину точку входу NGINX Ingress (порт 80):**
-  * FastAPI Swagger UI: `[http://127.0.0.1/docs](http://127.0.0.1/docs)`
-  * SQLite-web (перегляд БД): `[http://127.0.0.1/db](http://127.0.0.1/db)`
+  * FastAPI Swagger UI: `http://127.0.0.1/docs`
+  * SQLite-web (перегляд БД): `http://127.0.0.1/db`
 * **Напряму через сервіси типу `LoadBalancer`:**
-  * FastAPI Swagger UI: `[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)`
-  * SQLite-web: `[http://127.0.0.1:8080/db](http://127.0.0.1:8080/db)`
+  * FastAPI Swagger UI: `http://127.0.0.1:8000/docs`
+  * SQLite-web: `http://127.0.0.1:8080/db`
 
 ### 3. Перевірка стану ресурсів кластера
 ```bash
