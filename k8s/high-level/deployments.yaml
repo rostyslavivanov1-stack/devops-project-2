@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-backend
+  template:
+    metadata:
+      labels:
+        app: fastapi-backend
+    spec:
+      containers:
+        - name: fastapi-app
+          image: fastapi-app:v1
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: monitoring-config
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: sqlite-storage
+              mountPath: /app/data
+      volumes:
+        - name: sqlite-storage
+          persistentVolumeClaim:
+            claimName: sqlite-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlite-web-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqlite-viewer
+  template:
+    metadata:
+      labels:
+        app: sqlite-viewer
+    spec:
+      containers:
+        - name: sqlite-web
+          image: coleifer/sqlite-web:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: monitoring-config
+          command: ["sqlite_web", "-H", "0.0.0.0", "-p", "$(SQLITE_WEB_PORT)", "-u", "/db", "/data/app.db"]
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: sqlite-storage
+              mountPath: /data
+      volumes:
+        - name: sqlite-storage
+          persistentVolumeClaim:
+            claimName: sqlite-pvc

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monitoring-config
+data:
+  DB_PATH: "/app/data/app.db"
+  APP_PORT: "8000"
+  SQLITE_WEB_PORT: "8080"

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-stack
+  template:
+    metadata:
+      labels:
+        app: monitoring-stack
+    spec:
+      containers:
+        - name: fastapi-app
+          image: fastapi-app:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: shared-empty-dir
+              mountPath: /app/data
+
+        - name: sqlite-web
+          image: coleifer/sqlite-web:latest
+          imagePullPolicy: IfNotPresent
+          command: ["sqlite_web", "-H", "0.0.0.0", "-p", "8080", "/data/app.db"]
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: shared-empty-dir
+              mountPath: /data
+
+      volumes:
+        - name: shared-empty-dir
+          emptyDir: {}
