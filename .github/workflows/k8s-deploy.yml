@@ -1,0 +1,34 @@
+name: Kubernetes CI/CD Deployment
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  deploy-to-kubernetes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start Minikube cluster
+        uses: medyagh/setup-minikube@latest
+        with:
+          driver: docker
+          kubernetes-version: v1.31.0
+
+      - name: Run deployment script
+        run: |
+          chmod +x scripts/deploy.sh
+          ./scripts/deploy.sh
+
+      - name: Verify deployed services (Smoke Test)
+        run: |
+          kubectl port-forward service/fastapi-service-clusterip 8000:80 &
+          PF_PID=$!
+          sleep 3
+          curl -f http://127.0.0.1:8000/docs > /dev/null
+          echo "FastAPI Swagger UI is up and responding (HTTP 200)"
+          kill $PF_PID
