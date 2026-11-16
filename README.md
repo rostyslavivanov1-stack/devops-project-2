@@ -151,7 +151,7 @@ source venv/Scripts/activate
 pip install -r requirements.txt
 python host_monitoring_agent.py
 ```
-Надсилання даних можна перевірити у вебінтерфейсі `[http://127.0.0.1/db](http://127.0.0.1/db)` (таблиця `metrics`) або через `GET [http://127.0.0.1/metrics](http://127.0.0.1/metrics)`.
+Надсилання даних можна перевірити у вебінтерфейсі `http://127.0.0.1/db` (таблиця `metrics`) або через `GET http://127.0.0.1/metrics`.
 
 ---
 
@@ -161,7 +161,7 @@ python host_monitoring_agent.py
 
 1. **Ініціалізація середовища:** розгортання чистого однонодового кластера Minikube у хмарній віртуальній машині `ubuntu-latest`.
 2. **Автоматичний деплой:** виконання скрипту `./scripts/deploy.sh` та контроль статусу розгортання (`kubectl rollout status`).
-3. **Smoke Test:** прокидання тимчасового тунелю `kubectl port-forward service/fastapi-service-clusterip 8000:80` та перевірка працездатності API за допомогою `curl -f [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)` (`HTTP 200 OK`).
+3. **Smoke Test:** прокидання тимчасового тунелю `kubectl port-forward service/fastapi-service-clusterip 8000:80` та перевірка працездатності API за допомогою `curl -f http://127.0.0.1:8000/docs` (`HTTP 200 OK`).
 
 ---
 
